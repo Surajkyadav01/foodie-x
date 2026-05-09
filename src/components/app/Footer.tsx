@@ -5,7 +5,7 @@ import { Link } from "@tanstack/react-router";
 export function Footer() {
   const wa = `https://wa.me/916393869405?text=${encodeURIComponent("Hi! I want to know more about FoodieX")}`;
   return (
-    <footer className="mt-16 border-t" style={{ background: "linear-gradient(180deg, oklch(0.22 0.03 25), oklch(0.16 0.03 25))", color: "oklch(0.95 0.01 60)" }}>
+    <footer className="mt-16 border-t" style={{ background: "linear-gradient(180deg, oklch(0.93 0.04 50), oklch(0.88 0.05 40))" }}>
       <div className="max-w-6xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-4">
         <div className="space-y-3">
           <Logo size="lg" />
