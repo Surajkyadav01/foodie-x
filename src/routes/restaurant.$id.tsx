@@ -1,6 +1,6 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Star, Clock, IndianRupee, ArrowLeft, Plus, Minus, Leaf } from "lucide-react";
+import { Star, Clock, IndianRupee, ArrowLeft, Plus, Minus } from "lucide-react";
 import { useApp } from "@/lib/app-store";
 import { toast } from "sonner";
 
