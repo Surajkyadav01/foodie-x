@@ -43,10 +43,10 @@
 
 :root {
   --radius: 1rem;
-  --background: oklch(0.99 0.005 60);
+  --background: oklch(0.97 0.022 70);
   --foreground: oklch(0.15 0.02 20);
 
-  --card: oklch(1 0 0);
+  --card: oklch(0.995 0.008 70);
   --card-foreground: oklch(0.15 0.02 20);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.15 0.02 20);
