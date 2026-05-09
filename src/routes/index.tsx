@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { Search, MapPin, Star, Clock, IndianRupee, Tag } from "lucide-react";
 import { useApp } from "@/lib/app-store";
+import heroBanner from "@/assets/hero-banner.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -54,8 +55,15 @@ function Home() {
     <div className="animate-fade-in">
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 gradient-brand opacity-90" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_oklch(1_0_0/0.2),_transparent_50%)]" />
+        <img
+          src={heroBanner}
+          alt="Delicious assorted food banner"
+          width={1920}
+          height={1024}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-[oklch(0.35_0.18_25/0.85)] via-[oklch(0.25_0.15_20/0.75)] to-[oklch(0.15_0.05_20/0.85)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_oklch(1_0_0/0.15),_transparent_55%)]" />
         <div className="relative max-w-6xl mx-auto px-4 pt-10 pb-24 text-brand-foreground">
           <div className="flex items-center gap-2 text-sm/6 opacity-90">
             <MapPin className="size-4" />
