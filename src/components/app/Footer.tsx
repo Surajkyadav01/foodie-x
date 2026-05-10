@@ -8,7 +8,7 @@ export function Footer() {
     <footer className="mt-16 border-t" style={{ background: "linear-gradient(180deg, oklch(0.18 0.02 25), oklch(0.15 0.025 25))", color: "oklch(0.95 0.01 80)" }}>
       <div className="max-w-6xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-4">
         <div className="space-y-3">
-          <Logo size="lg" />
+          <Logo size="lg" tone="light" />
           <p className="text-sm leading-relaxed" style={{ color: "oklch(0.82 0.02 60)" }}>
             Premium food delivery, faster than your hunger. Discover restaurants, savings, and joy in every bite.
           </p>
