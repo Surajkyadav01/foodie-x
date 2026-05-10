@@ -78,14 +78,24 @@ function Home() {
           </h1>
           <p className="mt-3 max-w-xl opacity-90">From sizzling biryanis to crispy pizzas — discover the best of your city on FoodieX.</p>
 
-          <div className="mt-8 glass rounded-2xl p-2 flex items-center gap-2 max-w-2xl shadow-card">
-            <Search className="size-5 text-foreground/70 ml-2" />
+          <div className="mt-8 bg-card rounded-2xl p-1.5 flex items-center gap-2 max-w-2xl shadow-card border border-white/40 ring-1 ring-black/5 focus-within:ring-2 focus-within:ring-brand transition">
+            <div className="size-10 rounded-xl gradient-brand flex items-center justify-center shrink-0">
+              <Search className="size-5 text-brand-foreground" />
+            </div>
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search for restaurants, dishes…"
-              className="flex-1 bg-transparent outline-none text-foreground placeholder:text-foreground/60 py-2"
+              placeholder="Search for restaurants, dishes, cuisines…"
+              className="flex-1 bg-transparent outline-none text-foreground placeholder:text-muted-foreground py-2.5 text-base"
             />
+            {query && (
+              <button
+                onClick={() => setQuery("")}
+                className="text-xs text-muted-foreground hover:text-brand px-3 py-1 rounded-lg hover:bg-accent transition"
+              >
+                Clear
+              </button>
+            )}
           </div>
         </div>
       </section>
@@ -121,11 +131,17 @@ function Home() {
         <h2 className="text-lg font-bold mb-4">Today's offers</h2>
         <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
           {offers.map((o) => (
-            <div key={o.id} className={`min-w-[280px] rounded-2xl p-5 text-white bg-gradient-to-br ${o.color} shadow-soft`}>
+            <button
+              key={o.id}
+              onClick={() => {
+                navigator.clipboard?.writeText(o.subtitle.replace(/^Use code\s*/i, ""));
+              }}
+              className={`min-w-[280px] text-left rounded-2xl p-5 text-white bg-gradient-to-br ${o.color} shadow-soft transition duration-200 hover:-translate-y-1 hover:shadow-xl active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-white/60`}
+            >
               <Tag className="size-5 mb-2" />
               <div className="text-xl font-bold">{o.title}</div>
               <div className="text-sm opacity-90">{o.subtitle}</div>
-            </div>
+            </button>
           ))}
         </div>
       </section>
@@ -140,8 +156,8 @@ function Home() {
               <button
                 key={c.name}
                 onClick={() => setActiveCat(active ? null : c.name)}
-                className={`min-w-[88px] flex flex-col items-center gap-1 rounded-2xl p-3 border transition ${
-                  active ? "border-brand bg-brand/10" : "bg-card hover:border-brand/50"
+                className={`min-w-[92px] flex flex-col items-center gap-1.5 rounded-2xl p-3 border transition duration-200 hover:-translate-y-0.5 active:scale-95 ${
+                  active ? "border-brand bg-brand/10 shadow-soft" : "bg-card hover:border-brand/50 hover:shadow-card"
                 }`}
               >
                 <span className="text-3xl">{c.emoji}</span>
@@ -164,7 +180,7 @@ function Home() {
                 key={r.id}
                 to="/restaurant/$id"
                 params={{ id: r.id }}
-                className="group bg-card rounded-2xl overflow-hidden border shadow-card hover:-translate-y-1 transition"
+                className="group bg-card rounded-2xl overflow-hidden border shadow-card hover:-translate-y-1 hover:shadow-xl active:scale-[0.98] transition duration-200"
               >
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <img src={r.image} alt={r.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
