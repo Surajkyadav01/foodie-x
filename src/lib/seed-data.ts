@@ -32,6 +32,18 @@ export const seedCategories = [
   { name: "Desserts", emoji: "🍰" },
   { name: "Indian", emoji: "🍛" },
   { name: "South Indian", emoji: "🥞" },
+  { name: "Rolls", emoji: "🌯" },
+  { name: "Sandwich", emoji: "🥪" },
+  { name: "Pasta", emoji: "🍝" },
+  { name: "Momos", emoji: "🥟" },
+  { name: "Sushi", emoji: "🍣" },
+  { name: "Salad", emoji: "🥗" },
+  { name: "Coffee", emoji: "☕" },
+  { name: "Ice Cream", emoji: "🍦" },
+  { name: "Tacos", emoji: "🌮" },
+  { name: "Shawarma", emoji: "🥙" },
+  { name: "Healthy", emoji: "🥦" },
+  { name: "Breakfast", emoji: "🍳" },
 ];
 
 export const seedOffers = [
