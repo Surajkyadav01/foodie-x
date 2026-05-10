@@ -5,7 +5,7 @@ import { Link } from "@tanstack/react-router";
 export function Footer() {
   const wa = `https://wa.me/916393869405?text=${encodeURIComponent("Hi! I want to know more about FoodieX")}`;
   return (
-    <footer className="mt-16 border-t" style={{ background: "linear-gradient(180deg, oklch(0.93 0.04 50), oklch(0.88 0.05 40))" }}>
+    <footer className="mt-16 border-t" style={{ background: "linear-gradient(180deg, oklch(0.96 0.02 80), oklch(0.92 0.03 75))" }}>
       <div className="max-w-6xl mx-auto px-4 py-12 grid gap-10 md:grid-cols-4">
         <div className="space-y-3">
           <Logo size="lg" />
@@ -18,7 +18,7 @@ export function Footer() {
               aria-label="WhatsApp">
               <MessageCircle className="size-5" />
             </a>
-            <a href="#" className="size-10 rounded-full bg-accent flex items-center justify-center hover:scale-110 transition" aria-label="Instagram">
+            <a href="https://instagram.com/its_.surajx01" target="_blank" rel="noreferrer" className="size-10 rounded-full bg-accent flex items-center justify-center hover:scale-110 transition" aria-label="Instagram">
               <Instagram className="size-5" />
             </a>
             <a href="#" className="size-10 rounded-full bg-accent flex items-center justify-center hover:scale-110 transition" aria-label="Twitter">
@@ -63,10 +63,10 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="border-t">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row gap-2 justify-between items-center text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} FoodieX. All rights reserved.</p>
-          <p>Made with ❤️ by Suraj Yadav · Suriyawan, Bhadohi UP</p>
+      <div className="border-t" style={{ background: "oklch(0.22 0.03 25)" }}>
+        <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row gap-2 justify-between items-center text-sm" style={{ color: "oklch(0.97 0.01 80)" }}>
+          <p className="font-medium">© {new Date().getFullYear()} FoodieX. All rights reserved.</p>
+          <p style={{ color: "oklch(0.88 0.02 80)" }}>Made with ❤️ by Suraj Yadav · Suriyawan, Bhadohi UP</p>
         </div>
       </div>
 
