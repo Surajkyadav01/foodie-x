@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Search, MapPin, Star, Clock, IndianRupee, Tag } from "lucide-react";
+import { Search, MapPin, Star, Clock, IndianRupee, Tag, ShoppingCart, Truck } from "lucide-react";
 import { useApp } from "@/lib/app-store";
 import heroBanner from "@/assets/hero-banner.jpg";
 
@@ -165,6 +165,20 @@ function Home() {
               </button>
             );
           })}
+        </div>
+        <div className="mt-5 grid grid-cols-2 gap-3 sm:max-w-md">
+          <Link
+            to="/cart"
+            className="flex items-center justify-center gap-2 rounded-2xl border-2 border-brand bg-card text-brand font-semibold py-3 shadow-card hover:bg-brand hover:text-brand-foreground transition duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
+          >
+            <ShoppingCart className="size-5" /> View Cart
+          </Link>
+          <Link
+            to="/order-tracking"
+            className="flex items-center justify-center gap-2 rounded-2xl gradient-brand text-brand-foreground font-semibold py-3 shadow-soft hover:shadow-xl transition duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
+          >
+            <Truck className="size-5" /> Track Order
+          </Link>
         </div>
       </section>
 
