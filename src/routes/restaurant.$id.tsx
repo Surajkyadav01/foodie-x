@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Star, Clock, IndianRupee, ArrowLeft, Plus, Minus } from "lucide-react";
+import { Star, Clock, IndianRupee, ArrowLeft, Plus, Minus, ShoppingCart, Truck } from "lucide-react";
 import { useApp } from "@/lib/app-store";
 import { toast } from "sonner";
 
@@ -48,6 +48,20 @@ function RestaurantPage() {
         <Link to="/" className="absolute top-4 left-4 size-10 rounded-full glass flex items-center justify-center text-white">
           <ArrowLeft className="size-5" />
         </Link>
+        <div className="absolute top-4 right-4 flex gap-2">
+          <Link
+            to="/cart"
+            className="flex items-center gap-1.5 px-3 h-10 rounded-full bg-card/95 backdrop-blur text-brand border-2 border-brand font-semibold text-sm shadow-soft hover:bg-brand hover:text-brand-foreground transition active:scale-95"
+          >
+            <ShoppingCart className="size-4" /> Cart
+          </Link>
+          <Link
+            to="/order-tracking"
+            className="flex items-center gap-1.5 px-3 h-10 rounded-full gradient-brand text-brand-foreground font-semibold text-sm shadow-soft hover:shadow-xl transition active:scale-95"
+          >
+            <Truck className="size-4" /> Track
+          </Link>
+        </div>
         <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
           <div className="max-w-6xl mx-auto">
             <h1 className="text-3xl font-extrabold">{restaurant.name}</h1>
