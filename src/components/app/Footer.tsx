@@ -1,4 +1,4 @@
-import { Phone, Mail, MapPin, MessageCircle, Instagram, Twitter, Facebook } from "lucide-react";
+import { Phone, Mail, MapPin, MessageCircle, Instagram, Twitter, Facebook, Home, ShoppingCart, Truck, LogIn } from "lucide-react";
 import { Logo } from "./Logo";
 import { Link } from "@tanstack/react-router";
 
@@ -33,10 +33,38 @@ export function Footer() {
         <div>
           <h4 className="font-semibold mb-3" style={{ color: "oklch(0.98 0.01 60)" }}>Quick Links</h4>
           <ul className="space-y-2 text-sm" style={{ color: "oklch(0.82 0.02 60)" }}>
-            <li><Link to="/" className="hover:text-brand transition">Home</Link></li>
-            <li><Link to="/cart" className="hover:text-brand transition">Cart</Link></li>
-            <li><Link to="/order-tracking" className="hover:text-brand transition">Order Tracking</Link></li>
-            <li><Link to="/auth" className="hover:text-brand transition">Login</Link></li>
+            <li>
+              <Link to="/" className="group inline-flex items-center gap-2 hover:text-brand transition">
+                <span className="size-7 rounded-full flex items-center justify-center transition group-hover:scale-110" style={{ background: "oklch(1 0 0 / 0.08)", color: "oklch(0.85 0.12 60)" }}>
+                  <Home className="size-3.5" />
+                </span>
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link to="/cart" className="group inline-flex items-center gap-2 hover:text-brand transition">
+                <span className="size-7 rounded-full flex items-center justify-center transition group-hover:scale-110" style={{ background: "oklch(1 0 0 / 0.08)", color: "oklch(0.8 0.14 35)" }}>
+                  <ShoppingCart className="size-3.5" />
+                </span>
+                Cart
+              </Link>
+            </li>
+            <li>
+              <Link to="/order-tracking" className="group inline-flex items-center gap-2 hover:text-brand transition">
+                <span className="size-7 rounded-full flex items-center justify-center transition group-hover:scale-110" style={{ background: "oklch(1 0 0 / 0.08)", color: "oklch(0.8 0.15 145)" }}>
+                  <Truck className="size-3.5" />
+                </span>
+                Order Tracking
+              </Link>
+            </li>
+            <li>
+              <Link to="/auth" className="group inline-flex items-center gap-2 hover:text-brand transition">
+                <span className="size-7 rounded-full flex items-center justify-center transition group-hover:scale-110" style={{ background: "oklch(1 0 0 / 0.08)", color: "oklch(0.8 0.14 260)" }}>
+                  <LogIn className="size-3.5" />
+                </span>
+                Login
+              </Link>
+            </li>
           </ul>
         </div>
 
