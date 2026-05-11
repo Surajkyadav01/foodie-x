@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Search, MapPin, Star, Clock, IndianRupee, Tag, ShoppingCart, Truck } from "lucide-react";
+import { Search, MapPin, Star, Clock, IndianRupee, Tag } from "lucide-react";
 import { useApp } from "@/lib/app-store";
 import heroBanner from "@/assets/hero-banner.jpg";
 
@@ -36,6 +36,20 @@ function Home() {
       })
       .filter(Boolean) as typeof restaurants;
   }, [restaurants, query, activeCat]);
+
+  const categoryDishes = useMemo(() => {
+    if (!activeCat) return [];
+    const cat = activeCat.toLowerCase();
+    const out: { dish: typeof restaurants[number]["menu"][number]; restaurantId: string; restaurantName: string }[] = [];
+    restaurants.forEach((r) =>
+      r.menu.forEach((m) => {
+        if (m.category.toLowerCase() === cat) {
+          out.push({ dish: m, restaurantId: r.id, restaurantName: r.name });
+        }
+      }),
+    );
+    return out;
+  }, [restaurants, activeCat]);
 
   const matchedDishes = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -166,23 +180,43 @@ function Home() {
             );
           })}
         </div>
-        <div className="mt-5 grid grid-cols-2 gap-3 sm:max-w-md">
-          <Link
-            to="/cart"
-            className="flex items-center justify-center gap-2 rounded-2xl border-2 border-brand bg-card text-brand font-semibold py-3 shadow-card hover:bg-brand hover:text-brand-foreground transition duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
-          >
-            <ShoppingCart className="size-5" /> View Cart
-          </Link>
-          <Link
-            to="/order-tracking"
-            className="flex items-center justify-center gap-2 rounded-2xl gradient-brand text-brand-foreground font-semibold py-3 shadow-soft hover:shadow-xl transition duration-200 hover:-translate-y-0.5 active:scale-[0.97]"
-          >
-            <Truck className="size-5" /> Track Order
-          </Link>
-        </div>
       </section>
 
+      {/* Category dishes view */}
+      {activeCat && (
+        <section className="max-w-6xl mx-auto px-4 mt-10">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-bold">{activeCat} <span className="text-muted-foreground text-sm font-normal">({categoryDishes.length} dishes)</span></h2>
+            <button onClick={() => setActiveCat(null)} className="text-sm text-brand font-semibold hover:underline">Clear</button>
+          </div>
+          {categoryDishes.length === 0 ? (
+            <p className="text-muted-foreground">No {activeCat} dishes available yet.</p>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {categoryDishes.map((m) => (
+                <Link
+                  key={m.dish.id}
+                  to="/restaurant/$id"
+                  params={{ id: m.restaurantId }}
+                  className="group bg-card rounded-2xl overflow-hidden border shadow-card hover:-translate-y-1 hover:shadow-xl active:scale-[0.98] transition duration-200"
+                >
+                  <div className="aspect-[16/10] overflow-hidden">
+                    <img src={m.dish.image} alt={m.dish.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-bold truncate">{m.dish.name}</h3>
+                    <p className="text-sm text-muted-foreground truncate">at {m.restaurantName}</p>
+                    <div className="mt-2 font-bold text-brand">₹{m.dish.price}</div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+
       {/* Restaurants */}
+      {!activeCat && (
       <section className="max-w-6xl mx-auto px-4 mt-10">
         <h2 className="text-lg font-bold mb-4">{filtered.length} restaurants near you</h2>
         {filtered.length === 0 ? (
@@ -222,6 +256,7 @@ function Home() {
           </div>
         )}
       </section>
+      )}
     </div>
   );
 }
