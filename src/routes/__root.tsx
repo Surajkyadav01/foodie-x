@@ -115,6 +115,9 @@ function AuthGate({ children }: { children: React.ReactNode }) {
     if (!user && !onAuth) {
       navigate({ to: "/auth" });
     }
+    if (user && onAuth) {
+      navigate({ to: "/" });
+    }
   }, [user, onAuth, navigate]);
 
   if (!user && !onAuth) {
