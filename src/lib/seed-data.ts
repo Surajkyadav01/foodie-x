@@ -228,3 +228,26 @@ const _seedRestaurants: Restaurant[] = [
     ],
   },
 ];
+
+// Generate a unique, dish-specific thumbnail per menu item based on its name.
+// Uses loremflickr keyword search so each dish gets a relevant photo.
+const _stop = new Set(["with","and","of","the","a","an","fresh","mixed","classic","style","veg","non","pcs","bowl","stack","platter","shot","scoop"]);
+function _slug(name: string) {
+  const words = name
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, " ")
+    .split(/\s+/)
+    .filter((w) => w && !_stop.has(w));
+  return (words.slice(0, 3).join(",") || "food") + ",food";
+}
+function _dishImg(name: string, seed: number) {
+  return `https://loremflickr.com/600/400/${_slug(name)}?lock=${seed}`;
+}
+
+export const seedRestaurants: Restaurant[] = _seedRestaurants.map((r) => ({
+  ...r,
+  menu: r.menu.map((m, i) => ({
+    ...m,
+    image: _dishImg(m.name, (parseInt(m.id.replace(/\D/g, ""), 10) || i + 1) + 1000),
+  })),
+}));
