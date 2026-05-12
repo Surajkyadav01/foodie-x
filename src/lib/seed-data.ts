@@ -73,7 +73,7 @@ const breakfast = "1533089860892-a7c6f0a88666";
 const roll = "1565299715199-866c917206bb";
 const wrap = "1606755962773-d324e0a13086";
 
-export const seedRestaurants: Restaurant[] = [
+const _seedRestaurants: Restaurant[] = [
   {
     id: "r1",
     name: "Spice Symphony",
