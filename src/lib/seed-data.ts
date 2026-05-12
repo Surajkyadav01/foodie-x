@@ -229,25 +229,114 @@ const _seedRestaurants: Restaurant[] = [
   },
 ];
 
-// Generate a unique, dish-specific thumbnail per menu item based on its name.
-// Uses loremflickr keyword search so each dish gets a relevant photo.
-const _stop = new Set(["with","and","of","the","a","an","fresh","mixed","classic","style","veg","non","pcs","bowl","stack","platter","shot","scoop"]);
-function _slug(name: string) {
-  const words = name
-    .toLowerCase()
-    .replace(/[^a-z0-9 ]/g, " ")
-    .split(/\s+/)
-    .filter((w) => w && !_stop.has(w));
-  return (words.slice(0, 3).join(",") || "food") + ",food";
-}
-function _dishImg(name: string, seed: number) {
-  return `https://loremflickr.com/600/400/${_slug(name)}?lock=${seed}`;
+// Curated Unsplash photo IDs per dish keyword / category.
+// Each dish thumbnail must match its name — no random / mismatched images.
+const _u = (id: string, sig: number) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=800&q=80&sig=${sig}`;
+
+const _dishMap: Array<[RegExp, string]> = [
+  [/margherita/i, "1604068549290-dea0e4a305ca"],
+  [/pepperoni/i, "1628840042765-356cda07504e"],
+  [/farmhouse|pizza/i, "1513104890138-7c749659a591"],
+  [/cheese\s*burger|classic.*burger/i, "1568901346375-23c9450c58cd"],
+  [/veg.*burger|crunch.*burger/i, "1571091718767-18b5b1457add"],
+  [/burger/i, "1550317138-10000687a72b"],
+  [/chicken biryani/i, "1633945274405-b6c8b39f4264"],
+  [/veg biryani|biryani/i, "1589302168068-964664d93dc0"],
+  [/butter chicken/i, "1603894584373-5ac82b2ae398"],
+  [/paneer tikka masala|paneer tikka/i, "1565557623262-b51c2513a641"],
+  [/mango lassi|lassi/i, "1571805341302-f857fa6c33d3"],
+  [/coke|cola/i, "1561758033-d89a9ad46330"],
+  [/chocolate shake|milkshake/i, "1572490122747-3968b75cc699"],
+  [/hakka noodles|noodles/i, "1569718212165-3a8278d5f624"],
+  [/chilli chicken/i, "1585032226651-759b368d7246"],
+  [/fried rice|schezwan/i, "1603133872878-684f208fb84b"],
+  [/masala dosa|dosa/i, "1630383249896-424e482df921"],
+  [/idli/i, "1668236543090-82eba5ee5976"],
+  [/lava cake|chocolate cake/i, "1551024506-0bccd828d307"],
+  [/cheesecake/i, "1565958011703-44f9829ba187"],
+  [/club sandwich|chicken.*sandwich/i, "1567234669003-dce7a7a88821"],
+  [/paneer.*sandwich|bombay.*sandwich|grilled.*sandwich|sandwich/i, "1528735602780-2552fd46c7af"],
+  [/alfredo/i, "1645112411341-6c4fd023714a"],
+  [/arrabbiata|red sauce pasta/i, "1621996346565-e3dbc646d9a9"],
+  [/pesto pasta/i, "1473093295043-cdd812d0e601"],
+  [/mac.*cheese/i, "1543339308-43e59d6b73a6"],
+  [/pasta/i, "1551183053-bf91a1d81141"],
+  [/tandoori momos/i, "1645177628172-a94c1f96e6db"],
+  [/fried momos/i, "1626776877531-5d3c5c0aef4f"],
+  [/momos|dumpling/i, "1496116218417-1a781b1c416c"],
+  [/greek salad/i, "1540420773420-3366772f4999"],
+  [/caesar salad/i, "1551248429-40975aa4de74"],
+  [/quinoa.*bowl|buddha bowl/i, "1490645935967-10de6ba17061"],
+  [/garden.*salad|salad/i, "1512621776951-a57141f2eefd"],
+  [/cappuccino/i, "1509042239860-f550ce710b93"],
+  [/latte/i, "1461023058943-07fcbe16d735"],
+  [/mocha/i, "1572442388796-11668a67e53d"],
+  [/cold brew/i, "1517663154410-b4afdc9d3f78"],
+  [/espresso/i, "1510591509098-f4fdc6d0ff04"],
+  [/coffee/i, "1495474472287-4d71bcdd2085"],
+  [/sundae|brownie sundae/i, "1488900128323-21503983a07e"],
+  [/kulfi/i, "1568571780765-9276ac8b75a2"],
+  [/scoop|ice cream/i, "1501443762994-82bd5dace89a"],
+  [/avocado toast/i, "1541519920535-0fffc7b6c8b8"],
+  [/english breakfast/i, "1533089860892-a7c6f0a88666"],
+  [/pancake/i, "1528207776546-365bb710ee93"],
+  [/omelette/i, "1525351484163-7529414344d8"],
+  [/granola/i, "1490474504059-bf2db5ab2348"],
+  [/smoothie bowl/i, "1490474418585-ba9bad8fd0ea"],
+  [/grilled chicken bowl/i, "1532550907401-a500c9a57435"],
+  [/tofu/i, "1546069901-d5bfd2cbfb1f"],
+  [/healthy/i, "1490645935967-10de6ba17061"],
+  [/california roll/i, "1617196034796-73dfa7b1fd56"],
+  [/nigiri/i, "1611143669185-af224c5e3252"],
+  [/sushi/i, "1579871494447-9811cf80d66c"],
+  [/taco/i, "1565299585323-38d6b0865b47"],
+  [/falafel/i, "1593504049359-74330189a345"],
+  [/shawarma/i, "1561651823-34feb02250e4"],
+  [/kathi roll|tikka roll/i, "1565299715199-866c917206bb"],
+  [/egg roll/i, "1606755962773-d324e0a13086"],
+  [/roll/i, "1565299715199-866c917206bb"],
+  [/lime soda|lemonade/i, "1437418747212-8d9709afab22"],
+  [/cold coffee/i, "1517701604599-bb29b565090c"],
+  [/watermelon/i, "1502741126161-b048400d085d"],
+  [/masala chai|chai|tea/i, "1564890369478-c89ca6d9cde9"],
+  [/drink|juice|shake/i, "1544145945-f90425340c7e"],
+];
+
+const _catFallback: Record<string, string> = {
+  pizza: "1513104890138-7c749659a591",
+  burger: "1568901346375-23c9450c58cd",
+  biryani: "1633945274405-b6c8b39f4264",
+  drinks: "1544145945-f90425340c7e",
+  chinese: "1569718212165-3a8278d5f624",
+  desserts: "1551024506-0bccd828d307",
+  "south indian": "1630383249896-424e482df921",
+  sandwich: "1528735602780-2552fd46c7af",
+  pasta: "1551183053-bf91a1d81141",
+  momos: "1626776877531-5d3c5c0aef4f",
+  sushi: "1579871494447-9811cf80d66c",
+  salad: "1512621776951-a57141f2eefd",
+  coffee: "1509042239860-f550ce710b93",
+  "ice cream": "1501443762994-82bd5dace89a",
+  tacos: "1565299585323-38d6b0865b47",
+  shawarma: "1561651823-34feb02250e4",
+  rolls: "1565299715199-866c917206bb",
+  breakfast: "1533089860892-a7c6f0a88666",
+  healthy: "1490645935967-10de6ba17061",
+  veg: "1565557623262-b51c2513a641",
+  "non-veg": "1603894584373-5ac82b2ae398",
+};
+
+function _dishImg(name: string, category: string, seed: number) {
+  for (const [re, id] of _dishMap) if (re.test(name)) return _u(id, seed);
+  const id = _catFallback[category.toLowerCase()] || "1504674900247-0877df9cc836";
+  return _u(id, seed);
 }
 
 export const seedRestaurants: Restaurant[] = _seedRestaurants.map((r) => ({
   ...r,
   menu: r.menu.map((m, i) => ({
     ...m,
-    image: _dishImg(m.name, (parseInt(m.id.replace(/\D/g, ""), 10) || i + 1) + 1000),
+    image: _dishImg(m.name, m.category, (parseInt(m.id.replace(/\D/g, ""), 10) || i + 1) + 1000),
   })),
 }));
