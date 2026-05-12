@@ -4,13 +4,16 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
+  useNavigate,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
-import { AppProvider } from "@/lib/app-store";
+import { AppProvider, useApp } from "@/lib/app-store";
 import { Header } from "@/components/app/Header";
 import { Footer } from "@/components/app/Footer";
+import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
 
@@ -89,13 +92,38 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AppProvider>
-        <div className="min-h-screen flex flex-col">
-          <Header />
-          <main className="flex-1"><Outlet /></main>
-          <Footer />
-          <Toaster position="top-center" richColors />
-        </div>
+        <AuthGate>
+          <div className="min-h-screen flex flex-col">
+            <Header />
+            <main className="flex-1"><Outlet /></main>
+            <Footer />
+            <Toaster position="top-center" richColors />
+          </div>
+        </AuthGate>
       </AppProvider>
     </QueryClientProvider>
   );
+}
+
+function AuthGate({ children }: { children: React.ReactNode }) {
+  const { user } = useApp();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const onAuth = location.pathname === "/auth";
+
+  useEffect(() => {
+    if (!user && !onAuth) {
+      navigate({ to: "/auth" });
+    }
+  }, [user, onAuth, navigate]);
+
+  if (!user && !onAuth) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <main className="flex-1"><Outlet /></main>
+        <Toaster position="top-center" richColors />
+      </div>
+    );
+  }
+  return <>{children}</>;
 }
