@@ -1,7 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Search, MapPin, Star, Clock, IndianRupee, Tag } from "lucide-react";
+import { Search, MapPin, Star, Clock, IndianRupee, Tag, ShoppingCart, Zap } from "lucide-react";
 import { useApp } from "@/lib/app-store";
+import { toast } from "sonner";
 import heroBanner from "@/assets/hero-banner.jpg";
 
 export const Route = createFileRoute("/")({
@@ -15,7 +16,8 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const { restaurants, categories, offers, location, setLocation } = useApp();
+  const { restaurants, categories, offers, location, setLocation, addToCart } = useApp();
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [activeCat, setActiveCat] = useState<string | null>(null);
 
@@ -194,21 +196,56 @@ function Home() {
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {categoryDishes.map((m) => (
-                <Link
+                <div
                   key={m.dish.id}
-                  to="/restaurant/$id"
-                  params={{ id: m.restaurantId }}
-                  className="group bg-card rounded-2xl overflow-hidden border shadow-card hover:-translate-y-1 hover:shadow-xl active:scale-[0.98] transition duration-200"
+                  className="group bg-card rounded-2xl overflow-hidden border shadow-card hover:-translate-y-1 hover:shadow-xl transition duration-200 flex flex-col"
                 >
-                  <div className="aspect-[16/10] overflow-hidden">
+                  <Link
+                    to="/restaurant/$id"
+                    params={{ id: m.restaurantId }}
+                    className="block aspect-[16/10] overflow-hidden relative"
+                  >
                     <img src={m.dish.image} alt={m.dish.name} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                    <span className={`absolute top-2 left-2 size-4 border-2 flex items-center justify-center rounded-sm bg-white/90 ${m.dish.veg ? "border-green-600" : "border-red-600"}`}>
+                      <span className={`size-1.5 rounded-full ${m.dish.veg ? "bg-green-600" : "bg-red-600"}`} />
+                    </span>
+                  </Link>
+                  <div className="p-4 flex-1 flex flex-col">
+                    <Link to="/restaurant/$id" params={{ id: m.restaurantId }} className="hover:text-brand transition">
+                      <h3 className="font-bold truncate">{m.dish.name}</h3>
+                      <p className="text-xs text-muted-foreground truncate">at {m.restaurantName}</p>
+                    </Link>
+                    <div className="mt-2 flex items-center justify-between">
+                      <div className="font-bold text-brand text-lg">₹{m.dish.price}</div>
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Star className="size-3 fill-amber-500 stroke-amber-500" />
+                        <span>4.{(m.dish.price % 9)}</span>
+                      </div>
+                    </div>
+                    <div className="mt-3 flex gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          addToCart(m.dish, m.restaurantId);
+                          toast.success(`${m.dish.name} added to cart`);
+                        }}
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 rounded-lg border-2 border-brand text-brand font-semibold text-xs hover:bg-brand hover:text-brand-foreground transition active:scale-95"
+                      >
+                        <ShoppingCart className="size-3.5" /> Add
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          addToCart(m.dish, m.restaurantId);
+                          navigate({ to: "/cart" });
+                        }}
+                        className="flex-1 inline-flex items-center justify-center gap-1.5 h-9 rounded-lg gradient-brand text-brand-foreground font-semibold text-xs shadow-soft hover:shadow-lg transition active:scale-95"
+                      >
+                        <Zap className="size-3.5" /> Order
+                      </button>
+                    </div>
                   </div>
-                  <div className="p-4">
-                    <h3 className="font-bold truncate">{m.dish.name}</h3>
-                    <p className="text-sm text-muted-foreground truncate">at {m.restaurantName}</p>
-                    <div className="mt-2 font-bold text-brand">₹{m.dish.price}</div>
-                  </div>
-                </Link>
+                </div>
               ))}
             </div>
           )}
